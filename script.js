@@ -78,20 +78,46 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
-const calcDisplayBalance = function(movements){
+const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance} EUR`;
 };
 
-calcDisplayBalance(account1.movements)
+calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+
+  labelSumIn.textContent = `${incomes} EUR`;
+
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+
+  labelSumOut.textContent = `${Math.abs(out)} EUR`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => deposit * 1.2 / 100)
+    .filter((int, i, arr) => {
+      return int >= 1
+    })
+    .reduce((acc, interest) => acc + interest, 0);
+
+  labelSumInterest.textContent = `${interest} EUR`
+};
+
+calcDisplaySummary(account1.movements)
 
 const createUserName = function (accs) {
-  accs.forEach(function(acc){
+  accs.forEach(function (acc) {
     acc.username = acc.owner
-    .toLocaleLowerCase()
-    .split(' ')
-    .map((name) => name[0])
-    .join('')
+      .toLocaleLowerCase()
+      .split(' ')
+      .map((name) => name[0])
+      .join('')
   })
 }
 
